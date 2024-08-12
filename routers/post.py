@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from schemas.post import PostCreate, PostUpdate, PostRead
-from cruds import post
+from controllers import post
 from database import get_db
 from pydantic import PositiveInt
 
