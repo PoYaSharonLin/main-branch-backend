@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, PositiveInt
+from pydantic import BaseModel, Field, PositiveInt, ConfigDict
 from typing import Annotated
 from datetime import datetime
 
@@ -14,8 +14,10 @@ class PostRead(PostBase):
     id: PositiveInt
     created_at: datetime
     updated_at: datetime
-    class Config:
+
+    model_config = ConfigDict(
         from_attributes = True
+    )
 
 class PostUpdate(PostBase):
     pass
