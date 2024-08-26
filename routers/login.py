@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Request, Depends
 from fastapi.security import OAuth2AuthorizationCodeBearer
 from sqlalchemy.orm import Session
-from controllers import login
-from controllers.token import verify_token
+from controllers import login, auth
 from database import get_db
 from schemas.user import UserWithToken
 
@@ -21,5 +20,6 @@ async def auth_github(request: Request, db: Session = Depends(get_db)):
     return await login.auth_github(request, db)
 
 @login_router.get('/check-user')
-async def chekc_user(token: str = Depends(oauth2_scheme)):
-    return verify_token(token)
+async def chekc_user(request: Request):
+    user = auth.get_current_user(request)
+    return user

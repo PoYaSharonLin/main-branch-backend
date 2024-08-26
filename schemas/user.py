@@ -5,8 +5,9 @@ from datetime import datetime
 class UserBase(BaseModel):
     id: PositiveInt
     name: str
-    created_at: Optional[datetime]
-    updated_at: Optional[datetime]
+    role: str
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
 
 class UserRead(UserBase):
     model_config = ConfigDict(
@@ -21,3 +22,6 @@ class UserWithToken(BaseModel):
     model_config = ConfigDict(
         from_attributes = True
     )
+
+class UserProfile(UserBase):
+    pass

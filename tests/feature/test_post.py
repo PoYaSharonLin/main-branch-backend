@@ -1,9 +1,17 @@
 from models.post import Post
+from models.user import User
 from tests.conftest import TestingSessionLocal
 
+def create_fake_user(id = 1):
+    session = TestingSessionLocal()
+    db_user = User(**{"id": id, "name": "a"})
+    session.add(db_user)
+    session.commit()
+
 def test_create(client):
+    create_fake_user()
     # Normal create.
-    response = client.post("/posts", json={"title": "string", "content": "string", "poster": 1})
+    response = client.post("/posts", json={"title": "string", "content": "string"})
     assert response.status_code == 200
     with TestingSessionLocal() as session:
         post = session.query(Post).filter(Post.id == 1).first()
@@ -13,11 +21,12 @@ def test_create(client):
         assert post.poster == 1
 
     # Validation failed.
-    response = client.post("/posts", json={"title": "string", "content": "string", "poster": "abc"})
+    response = client.post("/posts", json={"title": "123456789012345678901234567890123456789012345678901", "content": "string"})
     assert response.status_code == 422
 
 
 def test_read(client):
+    create_fake_user()
     # No data.
     response = client.get("/posts/1")
     assert response.status_code == 404
@@ -34,6 +43,7 @@ def test_read(client):
     assert all(item in response.json() for item in {"title": "a", "content": "b", "poster": 1})
 
 def test_update(client):
+    create_fake_user()
     # No data.
     response = client.put("/posts/1", json={"title":"123", "content":"abc"})
     assert response.status_code == 404
@@ -54,6 +64,7 @@ def test_update(client):
     assert all(item in response.json() for item in {"title": "abc", "content": "123", "poster": 1})
 
 def test_delete(client):
+    create_fake_user()
     # No data.
     response = client.delete("/posts/1")
     assert response.status_code == 404
