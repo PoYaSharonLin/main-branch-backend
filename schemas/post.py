@@ -28,6 +28,7 @@ class PostUpdate(PostBase):
 class PostSimple(BaseModel):
     title: str
     tags: list[str] = []
+    id: PositiveInt
 
 class PostSearchResponse(BaseModel):
     posts: list[PostSimple] = []

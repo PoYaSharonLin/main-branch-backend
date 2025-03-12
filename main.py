@@ -1,9 +1,12 @@
-from fastapi import FastAPI, APIRouter, Request
+from fastapi import FastAPI, APIRouter, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from routers.post import post_router
 from routers.login import login_router
 from routers.comment import comment_router
+from models.user import User
 from starlette.middleware.sessions import SessionMiddleware
+from sqlalchemy.orm import Session
+from database import get_db
 from middlewares.auth import auth_middleware
 from dotenv import load_dotenv
 import os
@@ -37,3 +40,12 @@ app.add_middleware(
 )
 
 app.middleware("http")(auth_middleware)
+
+@app.on_event("startup")
+def on_startup():
+    db = next(get_db())
+    db_user = db.query(User).first()
+    if db_user is None:
+        db_user = User(**{"name":"admin","role":"admin"})
+        db.add(db_user)
+        db.commit()

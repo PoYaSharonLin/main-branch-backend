@@ -14,7 +14,7 @@ async def auth_middleware(request: Request, call_next):
 
     # Disable auth for simple setup.
     user = UserProfile(
-            id = 2147483647,
+            id = 1,
             name = "admin",
             role = "admin"
         )
