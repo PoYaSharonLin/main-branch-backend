@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from controllers import login, auth
 from database import get_db
 from schemas.user import UserWithToken
+from controllers.token import create_access_token
 
 login_router = APIRouter()
 oauth2_scheme = OAuth2AuthorizationCodeBearer(
@@ -23,3 +24,7 @@ async def auth_github(request: Request, db: Session = Depends(get_db)):
 async def chekc_user(request: Request):
     user = auth.get_current_user(request)
     return user
+
+@login_router.get('/test')
+async def test():
+    return create_access_token({"data":{"role":"admin", "accessable_users":[1, 2]}, "id":1})
