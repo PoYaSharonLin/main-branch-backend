@@ -18,14 +18,16 @@ app = FastAPI()
 router = APIRouter()
 router.include_router(
     post_router,
-    prefix='/posts'
+    prefix='/posts',
+    tags=['posts'],
 )
-router.include_router(
-    login_router
-)
+# router.include_router(
+#     login_router
+# )
 router.include_router(
     comment_router,
-    prefix='/comments'
+    prefix='/comments',
+    tags=['comments'],
 )
 app.include_router(router)
 

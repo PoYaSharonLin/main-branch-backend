@@ -31,4 +31,4 @@ class PostSimple(BaseModel):
     id: PositiveInt
 
 class PostSearchResponse(BaseModel):
-    posts: list[PostSimple] = []
+    posts: list[PostSimple]
