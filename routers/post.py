@@ -26,5 +26,12 @@ def delete_post(post_id: PositiveInt, db: Session = Depends(get_db), user: UserP
 	return post.delete(db=db, post_id=post_id, user=user)
 
 @post_router.get('', response_model=PostSearchResponse)
-def search_post(title: str = None, tags: list[str] = Query(None), db: Session = Depends(get_db)):
+def search_post(
+    title: str = Query(
+        None, 
+        description="Search by title. Use % as wildcard for any number of characters, _ as wildcard for a single character."
+    ), 
+    tags: list[str] = Query(None), 
+    db: Session = Depends(get_db)
+):
 	return post.search(db=db, title=title, tags=tags)
